@@ -311,7 +311,9 @@ class Tpl
                 $templateFilepath = $templateDirectory . $templateName . '.' . $this->config['tpl_ext'];
                 $parsedTemplateFilepath = $this->config['cache_dir'] . $templateName . "." . md5($templateDirectory . serialize($this->config['checksum'])) . '.rtpl.php';
                 $templateFilepath = FileSystem::normalizePath($templateFilepath);
-                $templateFilepparsedTemplateFilepathath = FileSystem::normalizePath($parsedTemplateFilepath);
+                dump( $templateFilepath);
+
+                $parsedTemplateFilepath = FileSystem::normalizePath($parsedTemplateFilepath);
                 // For check templates are exists
                 if (file_exists($templateFilepath)) {
                     $isFileNotExist = false;
@@ -319,7 +321,6 @@ class Tpl
                 }
             }
         }
-        dump( $templateFilepath);
 
         // if the template doesn't exsist throw an error
         if ($isFileNotExist === true) {
