@@ -176,7 +176,9 @@ class Tpl
 
             // add ending slash if missing
             if ($setting == "tpl_dir" || $setting == "cache_dir") {
-                $value = self::addTrailingSlash($value);
+                foreach($value as $k => $dir){
+                    $value[$k] = self::addTrailingSlash($dir);
+                }
             }
 
             static::$conf[$setting] = $value;
