@@ -29,8 +29,8 @@ require_once __DIR__ . '/../Plugin.php';
 class PathReplace extends \Rain\Tpl\Plugin
 {
     protected $hooks = array('afterParse');
-    // private $tags = array('a', 'img', 'link', 'script', 'form', 'input', 'object', 'embed');
-    private $tags = array('a', 'img', 'form', 'input', 'object', 'embed');
+     private $tags = array('a', 'img', 'link', 'script', 'form', 'input', 'object', 'embed');
+    //private $tags = array('a', 'img', 'form', 'input', 'object', 'embed');
 
     /**
      * replace the path of image src, link href and a href.
