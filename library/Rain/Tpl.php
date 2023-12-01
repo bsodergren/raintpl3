@@ -25,8 +25,6 @@
 
 namespace Rain;
 
-use Nette\Utils\FileSystem;
-
 /**
  *  RainTPL
  *  --------
@@ -298,9 +296,6 @@ class Tpl
             $templateDirectory = $templateBasedir;
             $templateFilepath = $templateDirectory . $templateName . '.' . $this->config['tpl_ext'];
             $parsedTemplateFilepath = $this->config['cache_dir'] . $templateName . "." . md5($templateDirectory . serialize($this->config['checksum'])) . '.rtpl.php';
-            $templateFilepath = FileSystem::normalizePath($templateFilepath);
-
-            $parsedTemplateFilepath = FileSystem::normalizePath($parsedTemplateFilepath);
             // For check templates are exists
             if (file_exists($templateFilepath)) {
                 $isFileNotExist = false;
@@ -310,10 +305,7 @@ class Tpl
                 $templateDirectory .= $templateBasedir;
                 $templateFilepath = $templateDirectory . $templateName . '.' . $this->config['tpl_ext'];
                 $parsedTemplateFilepath = $this->config['cache_dir'] . $templateName . "." . md5($templateDirectory . serialize($this->config['checksum'])) . '.rtpl.php';
-                $templateFilepath = FileSystem::normalizePath($templateFilepath);
-                dump( $templateFilepath);
 
-                $parsedTemplateFilepath = FileSystem::normalizePath($parsedTemplateFilepath);
                 // For check templates are exists
                 if (file_exists($templateFilepath)) {
                     $isFileNotExist = false;
@@ -324,7 +316,6 @@ class Tpl
 
         // if the template doesn't exsist throw an error
         if ($isFileNotExist === true) {
-            dd( $templateFilepath);
             $e = new Tpl\NotFoundException('Template ' . $templateName . ' not found!');
             throw $e->templateFile($templateFilepath);
         }
