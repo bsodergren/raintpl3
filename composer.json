@@ -14,6 +14,7 @@
         }
     ],
     "require": {
+        "nette/utils": "*",
         "php": ">=5.3"
     },
     "require-dev": {
