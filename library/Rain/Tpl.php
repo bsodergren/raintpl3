@@ -319,9 +319,11 @@ class Tpl
                 }
             }
         }
+        dump( $templateFilepath);
 
         // if the template doesn't exsist throw an error
         if ($isFileNotExist === true) {
+            dd( $templateFilepath);
             $e = new Tpl\NotFoundException('Template ' . $templateName . ' not found!');
             throw $e->templateFile($templateFilepath);
         }
