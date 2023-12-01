@@ -78,9 +78,7 @@ class Parser {
             '({function.*?})',
             '/{function="([a-zA-Z_][a-zA-Z_0-9\:]*)(\(.*\)){0,1}"}/'
         ),
-        'ternary' => array('({.[^{?>]*?\?.*?\:.*?})', '/{(.[^{?]*?)\?(.*?)\:(.*?)}/'),
-
-        
+        'ternary' => array('({.[^{?}]*?\?.*?\:.*?})', '/{(.[^{?}]*?)\?(.*?)\:(.*?)}/'),
         'variable' => array('({\$.*?})', '/{(\$.*?)}/'),
         'constant' => array('({#.*?})', '/{#(.*?)#{0,1}}/'),
     );
@@ -332,7 +330,6 @@ class Parser {
                     //get the included template
                     if (strpos($matches[1], '$') !== false) {
                         $includeTemplate = "'$actualFolder'." . $this->varReplace($matches[1], $loopLevel);
-                        
                     } else {
                         $includeTemplate = $actualFolder . $this->varReplace($matches[1], $loopLevel);
                     }
@@ -577,7 +574,7 @@ class Parser {
             }
         }
 
-        $parsedCode = str_replace('?><?php', ' ', $parsedCode ?? "");
+        $html = str_replace('?><?php', ' ', $parsedCode);
 
 
         // Execute plugins, after_parse
@@ -613,9 +610,7 @@ class Parser {
                 // escape character
                 if ($this->config['auto_escape'] && $escape)
                     //$html = "htmlspecialchars( $html )";
- 
-                    $html = "htmlspecialchars( $html ?? '', ENT_COMPAT, '" . $this->config['charset'] . "', FALSE )";
-
+                    $html = "htmlspecialchars( $html, ENT_COMPAT, '" . $this->config['charset'] . "', FALSE )";
 
                 // if is an assignment it doesn't add echo
                 if ($echo)
