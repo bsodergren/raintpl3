@@ -1,5 +1,5 @@
 {
-    "name": "rain/raintpl",
+    "name": "bsodergren/raintpl",
     "type": "library",
     "description": "easy and fast template engine",
     "homepage":"http://raintpl.com",
