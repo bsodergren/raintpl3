@@ -78,7 +78,9 @@ class Parser {
             '({function.*?})',
             '/{function="([a-zA-Z_][a-zA-Z_0-9\:]*)(\(.*\)){0,1}"}/'
         ),
-        'ternary' => array('({.[^{?}]*?\?.*?\:.*?})', '/{(.[^{?}]*?)\?(.*?)\:(.*?)}/'),
+        'ternary' => array('({.[^{?>]*?\?.*?\:.*?})', '/{(.[^{?]*?)\?(.*?)\:(.*?)}/'),
+
+        
         'variable' => array('({\$.*?})', '/{(\$.*?)}/'),
         'constant' => array('({#.*?})', '/{#(.*?)#{0,1}}/'),
     );
@@ -202,7 +204,7 @@ class Parser {
         if (flock($fp, LOCK_SH)) {
 
             // xml substitution
-            $code = preg_replace("/<\?xml(.*?)\?>/s", "##XML\\1XML##", $code);
+            $code = preg_replace("/<\?xml(.*?)\?>/s", "##XML\\1XML##", $code ?? "");
 
             // disable php tag
             if (!$this->config['php_enabled'])
@@ -315,7 +317,7 @@ class Parser {
                 elseif (preg_match($tagMatch['include'], $html, $matches)) {
 
                     //get the folder of the actual template
-                    $actualFolder = $templateDirectory;
+                    $actualFolder = (string)$templateDirectory;
 
                     if (is_array($this->config['tpl_dir'])) {
                         foreach($this->config['tpl_dir'] as $tpl) {
@@ -330,6 +332,8 @@ class Parser {
                     //get the included template
                     if (strpos($matches[1], '$') !== false) {
                         $includeTemplate = "'$actualFolder'." . $this->varReplace($matches[1], $loopLevel);
+                    } else if(strpos($matches[1], '/') === 0) {
+                        $includeTemplate = $this->varReplace(substr($matches[1], 1), $loopLevel);
                     } else {
                         $includeTemplate = $actualFolder . $this->varReplace($matches[1], $loopLevel);
                     }
@@ -574,7 +578,8 @@ class Parser {
             }
         }
 
-        $html = str_replace('?><?php', ' ', $parsedCode);
+        $parsedCode = str_replace('?><?php', ' ', $parsedCode ?? "");
+
 
         // Execute plugins, after_parse
         $context->code = $parsedCode;
@@ -609,7 +614,9 @@ class Parser {
                 // escape character
                 if ($this->config['auto_escape'] && $escape)
                     //$html = "htmlspecialchars( $html )";
-                    $html = "htmlspecialchars( $html, ENT_COMPAT, '" . $this->config['charset'] . "', FALSE )";
+ 
+                    $html = "htmlspecialchars( $html ?? '', ENT_COMPAT, '" . $this->config['charset'] . "', FALSE )";
+
 
                 // if is an assignment it doesn't add echo
                 if ($echo)
